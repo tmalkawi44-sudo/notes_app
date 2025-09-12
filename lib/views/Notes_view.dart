@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/views/exams_class.dart';
 import 'package:notes_app/views/note_class.dart';
+import 'package:notes_app/widgets/search_icon.dart';
 
 class NotesView extends StatefulWidget {
   @override
@@ -24,29 +25,72 @@ class _NotesViewState extends State<NotesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Toggle Body Example")),
-      body: getBody(),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ToggleButtons(
-          isSelected: isSelected,
-          onPressed: (int index) {
-            setState(() {
-              for (int i = 0; i < isSelected.length; i++) {
-                isSelected[i] = i == index;
-              }
-            });
-          },
+      appBar: AppBar(
+        title: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("Notes"),
+              padding: const EdgeInsets.only(left: 190),
+              child: Center(
+                child: Text('Note', style: TextStyle(fontSize: 20)),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("Exams"),
-            ),
+            Spacer(flex: 1),
+            SearchIcon(),
           ],
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 25),
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xffe5e5e5),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+
+                child: ToggleButtons(
+                  isSelected: isSelected,
+                  selectedColor: Colors.white,
+                  color: Colors.black,
+                  fillColor: Color(0xff379c8a),
+                  renderBorder: false,
+                  onPressed: (int index) {
+                    setState(() {
+                      for (int i = 0; i < isSelected.length; i++) {
+                        isSelected[i] = i == index;
+                      }
+                    });
+                  },
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        width: 150,
+                        child: Text("Notes"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        width: 150,
+                        child: Text("Exams"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              getBody(),
+            ],
+          ),
         ),
       ),
     );
