@@ -29,7 +29,7 @@ class _NotesViewState extends State<NotesView> {
         title: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 190),
+              padding: const EdgeInsets.only(left: 150),
               child: Center(
                 child: Text('Note', style: TextStyle(fontSize: 20)),
               ),
@@ -70,7 +70,7 @@ class _NotesViewState extends State<NotesView> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        width: 150,
+                        width: 130,
                         child: Text("Notes"),
                       ),
                     ),
@@ -80,7 +80,7 @@ class _NotesViewState extends State<NotesView> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        width: 150,
+                        width: 130,
                         child: Text("Exams"),
                       ),
                     ),
