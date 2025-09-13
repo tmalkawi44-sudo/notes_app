@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/widgets/exam_entry.dart';
 
-class ExamEntry {
-  String date;
-  String time;
-  String subject;
-
-  ExamEntry({this.date = '', this.time = '', this.subject = ''});
-}
-
-class ExamSection extends StatefulWidget {
+class ExamsContainer extends StatefulWidget {
   final String title;
-  const ExamSection({required this.title, super.key});
+  const ExamsContainer({required this.title, super.key});
 
   @override
-  State<ExamSection> createState() => _ExamSectionState();
+  State<ExamsContainer> createState() => _ExamsContainerState();
 }
 
-class _ExamSectionState extends State<ExamSection> {
+class _ExamsContainerState extends State<ExamsContainer> {
   List<ExamEntry> entries = [ExamEntry()];
 
   void addEntry() {
@@ -27,53 +20,59 @@ class _ExamSectionState extends State<ExamSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      elevation: 4,
-      child: Padding(
-        padding: EdgeInsets.all(12),
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Container(
+        padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               widget.title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
-            ...entries.map((entry) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(hintText: 'Date'),
-                        onChanged: (val) => entry.date = val,
+            const SizedBox(height: 10),
+
+            // ✅ Just a Column of Rows
+            Column(
+              children: entries.map((entry) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: const InputDecoration(hintText: 'Date'),
+                          onChanged: (val) => entry.date = val,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(hintText: 'Time'),
-                        onChanged: (val) => entry.time = val,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          decoration: const InputDecoration(hintText: 'Time'),
+                          onChanged: (val) => entry.time = val,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(hintText: 'Subject'),
-                        onChanged: (val) => entry.subject = val,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Subject',
+                          ),
+                          onChanged: (val) => entry.subject = val,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-            SizedBox(height: 10),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+
+            const SizedBox(height: 10),
             Align(
               alignment: Alignment.centerRight,
               child: IconButton(
-                icon: Icon(Icons.add_circle, color: Colors.blue),
+                icon: const Icon(Icons.add_circle, color: Colors.blue),
                 onPressed: addEntry,
               ),
             ),
