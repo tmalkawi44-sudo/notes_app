@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:notes_app/widgets/exam_entry.dart';
 
 class ExamsContainer extends StatefulWidget {
   final String title;
-  const ExamsContainer({required this.title, super.key});
+  Color color;
+  ExamsContainer({required this.title, required this.color});
 
   @override
   State<ExamsContainer> createState() => _ExamsContainerState();
@@ -27,9 +29,14 @@ class _ExamsContainerState extends State<ExamsContainer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.title,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Center(
+              child: Text(
+                widget.title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             const SizedBox(height: 10),
 
@@ -41,25 +48,61 @@ class _ExamsContainerState extends State<ExamsContainer> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(hintText: 'Date'),
-                          onChanged: (val) => entry.date = val,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(hintText: 'Time'),
-                          onChanged: (val) => entry.time = val,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: 'Subject',
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(35),
                           ),
-                          onChanged: (val) => entry.subject = val,
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: widget.color,
+                              ),
+                              child: TextField(
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '     Date',
+                                ),
+                                onChanged: (val) => entry.date = val,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: widget.color,
+                            ),
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '     Time',
+                              ),
+                              onChanged: (val) => entry.time = val,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            color: widget.color,
+                          ),
+                          child: Center(
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '     Subject',
+                              ),
+                              onChanged: (val) => entry.subject = val,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -70,7 +113,7 @@ class _ExamsContainerState extends State<ExamsContainer> {
 
             const SizedBox(height: 10),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: Alignment.bottomCenter,
               child: IconButton(
                 icon: const Icon(Icons.add_circle, color: Colors.blue),
                 onPressed: addEntry,
