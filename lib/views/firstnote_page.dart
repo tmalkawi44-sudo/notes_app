@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:notes_app/widgets/back_icon.dart';
 import 'package:notes_app/widgets/categories_selector.dart';
 import 'package:notes_app/widgets/note_model.dart';
+import 'package:notes_app/views/Notes_view.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,22 +96,45 @@ class _FirstnotePageState extends State<FirstnotePage> {
     final category = selectedCategory;
 
     await saveNote(title: title, content: content, category: category);
+
+    // Clear temporary data after saving
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('note_title');
+    await prefs.remove('selected_category');
+    await prefs.remove('notes_data');
+
+    // Navigate to main notes view page
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => NotesView()),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create your own list'),
+        title: Row(
+          children: [
+            BackIcon(),
+            Spacer(flex: 1),
+            const Text('Create your own list'),
+          ],
+        ),
         actions: [
-          IconButton(icon: const Icon(Icons.save), onPressed: saveFullNote),
+          IconButton(icon: const Icon(Icons.check), onPressed: saveFullNote),
         ],
       ),
       body: Column(
         children: [
           TextField(
             controller: titleController,
-            decoration: const InputDecoration(hintText: 'Title'),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: '       Title',
+            ),
             onChanged: saveTitle,
           ),
           Expanded(
@@ -161,6 +185,7 @@ class _FirstnotePageState extends State<FirstnotePage> {
               saveSelectedCategory(category);
             },
           ),
+          SizedBox(height: 75),
         ],
       ),
       floatingActionButton: FloatingActionButton(

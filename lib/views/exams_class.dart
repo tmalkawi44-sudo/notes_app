@@ -4,7 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notes_app/widgets/exams_container.dart';
 
 class ExamsClass extends StatelessWidget {
-  const ExamsClass({super.key});
+  final String searchQuery;
+  const ExamsClass({required this.searchQuery, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ExamsClass extends StatelessWidget {
               child: SvgPicture.asset('lib/icons/background ( all logos ).svg'),
             ),
           ),
-          Expanded(
+          Positioned.fill(
             child: ListView(
               children: [
                 SizedBox(height: 10),
@@ -37,6 +38,7 @@ class ExamsClass extends StatelessWidget {
                     child: ExamsContainer(
                       title: 'First exam',
                       color: Color(0xffdde7f3),
+                      searchQuery: searchQuery,
                     ),
                   ),
                 ),
@@ -57,6 +59,7 @@ class ExamsClass extends StatelessWidget {
                     child: ExamsContainer(
                       title: 'Midterm exam',
                       color: Color(0xffd9e6e4).withOpacity(0.7),
+                      searchQuery: searchQuery,
                     ),
                   ),
                 ),
@@ -77,6 +80,7 @@ class ExamsClass extends StatelessWidget {
                     child: ExamsContainer(
                       title: 'Second exam',
                       color: Color(0xffdde7f3),
+                      searchQuery: searchQuery,
                     ),
                   ),
                 ),
@@ -98,6 +102,7 @@ class ExamsClass extends StatelessWidget {
                     child: ExamsContainer(
                       title: 'Final exam',
                       color: Color(0xffd9e6e4).withOpacity(0.7),
+                      searchQuery: searchQuery,
                     ),
                   ),
                 ),

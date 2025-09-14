@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/views/exams_class.dart';
 import 'package:notes_app/views/note_class.dart';
+import 'package:notes_app/views/savednote_page.dart';
 import 'package:notes_app/widgets/search_icon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotesView extends StatefulWidget {
   @override
@@ -10,12 +12,39 @@ class NotesView extends StatefulWidget {
 
 class _NotesViewState extends State<NotesView> {
   List<bool> isSelected = [true, false];
+  bool hasSavedNotes = false;
+  bool isLoading = true;
+  String searchQuery = '';
+  @override
+  void initState() {
+    super.initState();
+    checkForSavedNotes();
+  }
+
+  Future<void> checkForSavedNotes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final notes = prefs.getStringList('notes') ?? [];
+
+    setState(() {
+      hasSavedNotes = notes.isNotEmpty;
+      isLoading = false;
+    });
+  }
+
+  void onSearchChanged(String query) {
+    setState(() {
+      searchQuery = query;
+    });
+  }
 
   Widget getBody() {
     if (isSelected[0]) {
-      return const NoteClass(); // Shows note creation or saved notes
+      if (isLoading) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      return hasSavedNotes ? const SavedNotesPage() : const NoteClass();
     } else if (isSelected[1]) {
-      return const ExamsClass(); // Shows exams view
+      return ExamsClass(searchQuery: searchQuery);
     }
     return const Center(
       child: Text("❓ Unknown View", style: TextStyle(fontSize: 24)),
@@ -28,14 +57,12 @@ class _NotesViewState extends State<NotesView> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 150),
+            Expanded(
               child: Center(
                 child: Text('Note', style: TextStyle(fontSize: 20)),
               ),
             ),
-            const Spacer(flex: 1),
-            const SearchIcon(),
+            SearchIcon(onSearchChanged: onSearchChanged),
           ],
         ),
       ),
