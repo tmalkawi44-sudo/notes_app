@@ -1,35 +1,52 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:notes_app/views/exams_class.dart';
 import 'package:notes_app/views/firstnote_page.dart';
+import 'package:notes_app/views/note_class.dart';
+import 'package:notes_app/widgets/note_model.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SavedNotePage extends StatelessWidget {
-  const SavedNotePage({super.key});
+class SavedNotesPage extends StatelessWidget {
+  const SavedNotesPage({super.key});
 
-  Future<Map<String, String>> loadNoteData() async {
+  Future<List<Note>> loadNotes() async {
     final prefs = await SharedPreferences.getInstance();
-    return {
-      'title': prefs.getString('note_title') ?? '',
-      'category': prefs.getString('note_category') ?? '',
-      'content': prefs.getString('note_content') ?? '',
-    };
+    final rawList = prefs.getStringList('notes') ?? [];
+
+    return rawList.map((jsonStr) {
+      final map = jsonDecode(jsonStr);
+      return Note.fromMap(map);
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<Map<String, String>>(
-        future: loadNoteData(),
+      body: FutureBuilder<List<Note>>(
+        future: loadNotes(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             return const Center(child: CircularProgressIndicator());
 
-          final data = snapshot.data!;
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24),
+          final notes = snapshot.data!;
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              const Text(
+                '📝 Your Saved Notes',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'You have ${notes.length} note${notes.length == 1 ? '' : 's'} saved.',
+              ),
+              const SizedBox(height: 24),
+              ...notes.map((note) {
+                final checklist = NoteItem.decode(note.content);
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 16),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
@@ -40,28 +57,42 @@ class SavedNotePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Title: ${data['title']}',
+                        'Title: ${note.title}',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
                       Text(
-                        'Category: ${data['category']}',
-                        style: const TextStyle(fontSize: 16),
+                        'Category: ${note.category}',
+                        style: const TextStyle(fontStyle: FontStyle.italic),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Content: ${data['content']}',
-                        style: const TextStyle(fontSize: 16),
+                      ...checklist.map(
+                        (item) => Row(
+                          children: [
+                            Icon(
+                              item.isChecked
+                                  ? Icons.check_box
+                                  : Icons.check_box_outline_blank,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(item.text),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {
+                );
+              }),
+              const SizedBox(height: 20),
+              Center(
+                child: GestureDetector(
+                  onTap: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.remove('note_title');
+                    await prefs.remove('selected_category');
+                    await prefs.remove('notes_data');
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -79,8 +110,8 @@ class SavedNotePage extends StatelessWidget {
                     child: const Icon(Icons.add, color: Colors.white),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),

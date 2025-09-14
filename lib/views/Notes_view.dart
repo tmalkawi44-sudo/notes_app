@@ -13,11 +13,11 @@ class _NotesViewState extends State<NotesView> {
 
   Widget getBody() {
     if (isSelected[0]) {
-      return NoteClass();
+      return const NoteClass(); // Shows note creation or saved notes
     } else if (isSelected[1]) {
-      return ExamsClass();
+      return const ExamsClass(); // Shows exams view
     }
-    return Center(
+    return const Center(
       child: Text("❓ Unknown View", style: TextStyle(fontSize: 24)),
     );
   }
@@ -28,69 +28,62 @@ class _NotesViewState extends State<NotesView> {
       appBar: AppBar(
         title: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 150),
+            const Padding(
+              padding: EdgeInsets.only(left: 150),
               child: Center(
                 child: Text('Note', style: TextStyle(fontSize: 20)),
               ),
             ),
-            Spacer(flex: 1),
-            SearchIcon(),
+            const Spacer(flex: 1),
+            const SearchIcon(),
           ],
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 25),
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xffe5e5e5),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-
-                child: ToggleButtons(
-                  isSelected: isSelected,
-                  selectedColor: Colors.white,
-                  color: Colors.black,
-                  fillColor: Color(0xff379c8a),
-                  renderBorder: false,
-                  onPressed: (int index) {
-                    setState(() {
-                      for (int i = 0; i < isSelected.length; i++) {
-                        isSelected[i] = i == index;
-                      }
-                    });
-                  },
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        width: 130,
-                        child: Text("Notes"),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        width: 130,
-                        child: Text("Exams"),
-                      ),
-                    ),
-                  ],
-                ),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xffe5e5e5),
+                borderRadius: BorderRadius.circular(15),
               ),
-
-              getBody(),
-            ],
-          ),
+              child: ToggleButtons(
+                isSelected: isSelected,
+                selectedColor: Colors.white,
+                color: Colors.black,
+                fillColor: const Color(0xff379c8a),
+                renderBorder: false,
+                onPressed: (int index) {
+                  setState(() {
+                    for (int i = 0; i < isSelected.length; i++) {
+                      isSelected[i] = i == index;
+                    }
+                  });
+                },
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Container(
+                      width: 130,
+                      alignment: Alignment.center,
+                      child: const Text("Notes"),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Container(
+                      width: 130,
+                      alignment: Alignment.center,
+                      child: const Text("Exams"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(child: getBody()),
+          ],
         ),
       ),
     );
