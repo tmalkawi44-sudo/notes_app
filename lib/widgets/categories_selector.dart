@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class CategorySelector extends StatelessWidget {
   final List<String> categories;
-  final String selectedCategory;
+  String selectedCategory = '';
   final Function(String) onCategorySelected;
 
-  const CategorySelector({
+  CategorySelector({
     required this.categories,
     required this.selectedCategory,
     required this.onCategorySelected,
     super.key,
   });
-
+  @override
   @override
   Widget build(BuildContext context) {
     return Row(
