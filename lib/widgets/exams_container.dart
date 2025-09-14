@@ -266,7 +266,7 @@ class _ExamsContainerState extends State<ExamsContainer> {
                       const SizedBox(width: 8),
                       // Delete button
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                        icon: const Icon(Icons.delete, color: Colors.black),
                         onPressed: () => deleteEntry(originalIndex),
                         iconSize: 20,
                       ),

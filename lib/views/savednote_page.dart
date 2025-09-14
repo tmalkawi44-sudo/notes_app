@@ -81,8 +81,8 @@ class _SavedNotesPageState extends State<SavedNotesPage> {
                     margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.blueAccent),
+                      color: Color(0xffcfdbeb).withOpacity(0.6),
+                      border: Border.all(color: Color(0xff546068)),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
@@ -157,13 +157,13 @@ class _SavedNotesPageState extends State<SavedNotesPage> {
                       }
                     },
                     child: Container(
-                      width: 60,
-                      height: 60,
+                      width: 30,
+                      height: 30,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.blue,
+                        color: Color(0xffcfdbeb),
                       ),
-                      child: const Icon(Icons.add, color: Colors.white),
+                      child: const Icon(Icons.add, color: Colors.black),
                     ),
                   ),
                 ),
